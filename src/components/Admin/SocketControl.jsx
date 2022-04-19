@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Socket from "./Socket";
 
 const SocketControl = () => {
 	const [editing, setEditing] = useState({
@@ -106,6 +107,9 @@ const SocketControl = () => {
 	};
 
 	const handleSaveBtn = () => {
+		if (editingSocket.text === "" || editingSocket.mib === "") {
+			return;
+		}
 		setLocations((prev) => {
 			let l = [...prev];
 			let items = [l[editing.locationID].sockets];
@@ -127,6 +131,35 @@ const SocketControl = () => {
 		});
 	};
 
+	const handleNewSocket = (lid) => {
+		console.log("pressed");
+		setLocations((prev) => {
+			let l = [...prev];
+			l[lid].sockets = [
+				...l[lid].sockets,
+				{
+					id: 1,
+					type: "",
+					text: "",
+					isOn: false,
+					color: "bg-green-500",
+					mib: "",
+				},
+			];
+			return l;
+		});
+
+		setEditingSocket({
+			...locations[lid].sockets[locations[lid].sockets.length - 1],
+		});
+		setEditing({
+			locationID: lid,
+			socketID: locations[lid].sockets.length - 1,
+		});
+	};
+
+	useEffect(() => {}, [locations]);
+
 	return (
 		<div className='w-full lg:w-[1200px] mx-auto h-full'>
 			{locations.map((vv, ii) => (
@@ -135,79 +168,23 @@ const SocketControl = () => {
 					Домен: <h2 className='px-4 font-medium'>{vv.domain}</h2>
 					Порт: <h2 className='px-4 font-medium'>{vv.port}</h2>
 					{vv.sockets.map((v, i) => (
-						<div
+						<Socket
 							key={i}
-							className={`w-full h-[200px] my-4 rounded-md text-black flex p-4 border border-1 justify-between`}>
-							{editing.locationID === ii && editing.socketID === i ? (
-								<div className='grid items-center'>
-									<input
-										value={editingSocket.text}
-										onChange={(e) =>
-											setEditingSocket((prev) => ({
-												...prev,
-												text: e.target.value,
-											}))
-										}
-										type='text'
-										className='border rounded-md text-xl'
-									/>
-									<input
-										value={editingSocket.type}
-										onChange={(e) =>
-											setEditingSocket((prev) => ({
-												...prev,
-												type: e.target.value,
-											}))
-										}
-										type='text'
-										className='border rounded-md text-xl'
-									/>
-									<input
-										value={editingSocket.mib}
-										onChange={(e) =>
-											setEditingSocket((prev) => ({
-												...prev,
-												mib: e.target.value,
-											}))
-										}
-										type='text'
-										className='border rounded-md text-xl'
-									/>
-								</div>
-							) : (
-								<div className='grid items-center'>
-									<h3 className='text-xl'>Название: {v.text}</h3>
-									<h3 className='text-lg'>Тип: {v.type}</h3>
-									<h3 className='text-lg'>MIB адрес: {v.mib}</h3>
-								</div>
-							)}
-							<div className='h-full flex items-end gap-2'>
-								<button
-									onClick={() => handleDeleteBtn(ii, i)}
-									className='h-[50px] text-red-600'>
-									удалить
-								</button>
-								<button
-									onClick={() => handleEditBtn(ii, i)}
-									className='h-[50px] text-blue-500'>
-									{editing.locationID === ii && editing.socketID === i
-										? "отменить"
-										: "изменить"}
-								</button>
-								{editing.locationID === ii && editing.socketID === i ? (
-									<button
-										onClick={() => handleSaveBtn()}
-										className='h-[50px] text-red-600'>
-										сохранить
-									</button>
-								) : (
-									<></>
-								)}
-							</div>
-						</div>
+							i={i}
+							ii={ii}
+							socket={v}
+							editing={editing}
+							editingSocket={editingSocket}
+							setEditingSocket={setEditingSocket}
+							handleDeleteBtn={handleDeleteBtn}
+							handleSaveBtn={handleSaveBtn}
+							handleEditBtn={handleEditBtn}
+						/>
 					))}
 					<div className='w-full flex justify-center mb-3'>
-						<button className='rounded-full shadow-sm text-blue-500 border border-1 text-xl w-[100px] h-[40px]'>
+						<button
+							onClick={() => handleNewSocket(ii)}
+							className='rounded-full shadow-sm text-blue-500 border border-1 text-xl w-[100px] h-[40px]'>
 							+
 						</button>
 					</div>
