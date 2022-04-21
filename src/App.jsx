@@ -8,7 +8,7 @@ function App() {
 		<>
 			<Navbar />
 			<Routes>
-				<Route path='/socket/*' element={<Manager />} />
+				<Route path='/socket/:id' element={<Manager />} />
 				<Route path='/admin' element={<SocketControl />} />
 			</Routes>
 		</>

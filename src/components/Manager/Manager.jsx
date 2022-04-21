@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { listSocketsByLocation, toggleSocket } from "../../api/sockets";
 import Loader from "../Loager/Loader";
 import Warning from "../Modals/Warning";
 
 const Manager = () => {
 	const [search, setSearch] = useSearchParams();
+	const { id } = useParams();
 	const [station, setStation] = useState({
 		domain: null,
 		community: null,
@@ -18,12 +19,7 @@ const Manager = () => {
 	});
 	const [loading, setLoading] = useState(false);
 	const [sockets, setSockets] = useState([]);
-	const socketColors = [
-		"bg-green-500",
-		"bg-blue-500",
-		"bg-red-500",
-		"bg-purple-500",
-	];
+	const socketColors = ["", "bg-orage-500", "bg-blue-500", "bg-red-400", "bg-purple-500"];
 
 	const handleBtn = (id, i) => {
 		console.log(id);
@@ -31,41 +27,27 @@ const Manager = () => {
 	};
 
 	const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+	const fiveSecondsInMS = 5000;
 
 	const handleToggle = async (id, turnOn) => {
 		toggleSocket(id, !turnOn);
 		setWarning({ check: false, socketID: null, socketIndex: null });
 		setLoading(true);
-		await delay(5000);
-		loadSockets(station.domain);
+		await delay(fiveSecondsInMS);
+		loadSockets(id);
 		setLoading(false);
 	};
 
-	const loadSockets = async (domain) => {
-		const data = await listSocketsByLocation(domain);
+	const loadSockets = async () => {
+		const data = await listSocketsByLocation(id);
 		setSockets(data);
 		console.log(data);
 	};
 
 	useEffect(() => {
-		let domain = search.get("domain");
-		let community = search.get("community");
-		let port = search.get("port");
-		loadSockets(domain);
-		setStation({ domain: domain, community: community, port: port });
+		loadSockets();
+		// setStation({ domain: domain, community: community, port: port });
 	}, []);
-
-	if (
-		station.domain == null ||
-		station.community == null ||
-		station.port == null
-	) {
-		return (
-			<div className='w-full md:w-[1000px] mx-auto text-3xl text-center'>
-				Не хватает параметров в адресной строке
-			</div>
-		);
-	}
 
 	return (
 		<div className='w-full min-h-full bg-white'>
@@ -85,7 +67,10 @@ const Manager = () => {
 					<Loader />
 				) : (
 					<div className='grid md:flex md:flex-wrap text-white text-xl justify-center py-12 w-full'>
-						{sockets.map((v, i) => (
+						{sockets === null ? (
+							<>У этой станции нету машин</>
+						) : (
+<>								{sockets.map((v, i) => (
 							<div
 								key={i}
 								className={`my-4 md:m-4 rounded-md overflow-hidden w-[250px] h-[140px] p-2 ${
@@ -102,7 +87,9 @@ const Manager = () => {
 									{v.name}
 								</button>
 							</div>
-						))}
+						))}</>
+						)}
+					
 					</div>
 				)}
 			</div>
