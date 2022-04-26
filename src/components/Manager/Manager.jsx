@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { listSocketsByLocation, toggleSocket } from "../../api/sockets";
+import { listSockets, listSocketsByLocation, toggleSocket } from "../../api/sockets";
 import Loader from "../Loager/Loader";
 import Warning from "../Modals/Warning";
 
 const Manager = () => {
-	const [search, setSearch] = useSearchParams();
 	const { id } = useParams();
 	const [station, setStation] = useState({
-		domain: null,
-		community: null,
-		port: null,
+		name:"",
 	});
 	const [warning, setWarning] = useState({
 		check: false,
@@ -19,10 +16,15 @@ const Manager = () => {
 	});
 	const [loading, setLoading] = useState(false);
 	const [sockets, setSockets] = useState([]);
-	const socketColors = ["", "bg-orage-500", "bg-blue-500", "bg-red-400", "bg-purple-500"];
+	const socketColors = [
+		"",
+		"bg-orage-500",
+		"bg-blue-500",
+		"bg-red-400",
+		"bg-purple-500",
+	];
 
 	const handleBtn = (id, i) => {
-		console.log(id);
 		setWarning({ check: true, socketID: id, socketIndex: i });
 	};
 
@@ -40,8 +42,15 @@ const Manager = () => {
 
 	const loadSockets = async () => {
 		const data = await listSocketsByLocation(id);
+		const list = await listSockets();
+		if (data.length > 0) {
+			for (let i = 0; i < list.length; i++) {
+				if (list[i].snmpAddress == data[0].snmpAddress) {
+					setStation({name: list[i].name})
+				}
+			}
+		}
 		setSockets(data);
-		console.log(data);
 	};
 
 	useEffect(() => {
@@ -53,10 +62,7 @@ const Manager = () => {
 		<div className='w-full min-h-full bg-white'>
 			<div className='w-full sm:-[600px] md:-[800px] lg:w-[1200px] mx-0 md:mx-auto overflow-hidden'>
 				<div className=' bg-red-500 m-4 py-12 rounded-xl text-yellow-200 font-medium'>
-					{" "}
-					<h1 className='w-full flex justify-center pb-12 text-2xl'>
-						Убедитесь что это правильный домен: {station.domain}
-					</h1>
+					<h1 className="text-white text-center text-2xl">{station.name}</h1>
 					<h2 className='w-full flex justify-center text-xl text-center'>
 						Кнопки снизу отвечают за управление оборудованием в этой станции{" "}
 						<br />
@@ -67,29 +73,31 @@ const Manager = () => {
 					<Loader />
 				) : (
 					<div className='grid md:flex md:flex-wrap text-white text-xl justify-center py-12 w-full'>
-						{sockets === null ? (
-							<>У этой станции нету машин</>
+						{typeof sockets === 'object' && sockets === null ? (
+							<div className="text-black">У этой станции нету машин</div>
 						) : (
-<>								{sockets.map((v, i) => (
-							<div
-								key={i}
-								className={`my-4 md:m-4 rounded-md overflow-hidden w-[250px] h-[140px] p-2 ${
-									v.isON ? "bg-green-500" : "bg-gray-500"
-								}`}>
-								<h2 className={` flex w-full justify-center`}>
-									{v.isON ? "on" : "off"}
-								</h2>
-								<button
-									onClick={() => handleBtn(v.id, i)}
-									className={`${
-										v.isON ? socketColors[v.objectType] : "bg-gray-500"
-									} w-full h-[77%] break-all rounded-md`}>
-									{v.name}
-								</button>
-							</div>
-						))}</>
+							<>
+								{" "}
+								{sockets.map((v, i) => (
+									<div
+										key={i}
+										className={`my-4 md:m-4 rounded-md overflow-hidden w-[250px] h-[140px] p-2 ${
+											v.isON ? "bg-green-500" : "bg-gray-500"
+										}`}>
+										<h2 className={` flex w-full justify-center`}>
+											{v.isON ? "on" : "off"}
+										</h2>
+										<button
+											onClick={() => handleBtn(v.id, i)}
+											className={`${
+												v.isON ? socketColors[v.objectType] : "bg-gray-500"
+											} w-full h-[77%] break-all rounded-md`}>
+											{v.name}
+										</button>
+									</div>
+								))}
+							</>
 						)}
-					
 					</div>
 				)}
 			</div>

@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { addSocket, deleteSocket, listSockets } from "../../api/sockets";
+import {
+	addSocket,
+	deleteSocket,
+	listSockets,
+	updateSocket,
+} from "../../api/sockets";
 import Socket from "./Socket";
 
 const SocketControl = () => {
@@ -10,7 +15,14 @@ const SocketControl = () => {
 		mib: "",
 		type: 1,
 	});
+	const [editingSocket, setEditingSocket] = useState({
+		locationID: null,
+		name: "",
+		mib: "",
+		type: 1,
+	});
 	const [isNewSocket, setIsNewSocket] = useState(0);
+	const [isEditingSocket, setIsEditingSocket] = useState(0);
 
 	const loadLocations = async () => {
 		const list = await listSockets();
@@ -43,6 +55,31 @@ const SocketControl = () => {
 		loadLocations();
 	};
 
+	// This function starts the changing process of a socket
+	const handleChangeBtn = (socket, locationID) => {
+		console.log(socket.id);
+		setIsEditingSocket(socket.id);
+		setEditingSocket({
+			locationID: locationID,
+			name: socket.name,
+			mib: socket.snmpMib,
+			type: socket.type,
+		});
+	};
+
+	// This function saves all the changes that were made after
+	// call of 'handleChangeBtn()'
+	const handleSaveChangesBtn = async () => {
+		const result = await updateSocket(
+			isEditingSocket.id,
+			editingSocket.name,
+			editingSocket.type,
+			editingSocket.mib
+		);
+		console.log(result);
+		setIsEditingSocket(null);
+	};
+
 	useEffect(() => {
 		loadLocations();
 	}, []);
@@ -53,17 +90,25 @@ const SocketControl = () => {
 				<div
 					key={ii}
 					className='w-full my-6 pb-1 p-4 border border-gray-200 shadow-sm rounded-md'>
+					ID:<h2 className='px-4 font-medium'>{vv.id}</h2>
 					Станция:<h2 className='px-4 font-medium'>{vv.name}</h2>
 					Домен: <h2 className='px-4 font-medium'>{vv.snmpAddress}</h2>
 					{vv.sockets !== null ? (
 						<>
-						{vv.sockets.map((v, i) => (
-						<Socket key={i} socket={v} handleDeleteBtn={handleDeleteBtn} />
-					))}
+							{vv.sockets.map((v, i) => (
+								<Socket
+									key={i}
+									socket={v}
+									handleDeleteBtn={handleDeleteBtn}
+									handleChangeBtn={handleChangeBtn}
+									editingSocket={isEditingSocket}
+									setEditingSocket={setEditingSocket}
+								/>
+							))}
 						</>
-						
-					) : (<></>)}
-					
+					) : (
+						<></>
+					)}
 					{isNewSocket == vv.id ? (
 						<div className='w-full grid border border-gray-400 rounded-md mb-4'>
 							<div className='m-2 text-xl'>
@@ -93,7 +138,10 @@ const SocketControl = () => {
 								<select
 									placeholder='тип машины'
 									onChange={(e) =>
-										setNewSocket((prev) => ({ ...prev, type: Number(e.target.value) }))
+										setNewSocket((prev) => ({
+											...prev,
+											type: Number(e.target.value),
+										}))
 									}
 									name='objectType'
 									id='objectType'

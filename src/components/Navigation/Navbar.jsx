@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import gearlogo from "/gear.svg";
 
 const Navbar = () => {
 	const navigate = useNavigate();
@@ -18,7 +17,7 @@ const Navbar = () => {
 				<button
 					onClick={() => navigate("/admin")}
 					className='text-2xl h-full p-2'>
-					<img className='h-full' src={gearlogo} alt='settings' />
+					Настройки
 				</button>
 			</div>
 		</div>
