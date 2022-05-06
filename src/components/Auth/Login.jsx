@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import eyeLogo from "../../assets/eye.png";
 
-const Login = () => {
+const Login = ({ handleLogin }) => {
 	const [form, setForm] = useState({
 		username: "",
 		password: "",
@@ -9,7 +9,7 @@ const Login = () => {
 	const [isVisiblePswd, setIsVisiblePswd] = useState(false);
 	return (
 		<div className='w-screen h-screen flex justify-center items-center'>
-			<div className='w-[400px] h-[200px] bg-blue-100 rounded-md p-2 shadow-xl'>
+			<div className='w-[400px] h-[200px] bg-blue-100 rounded-md p-2 pb-0 shadow-xl'>
 				<input
 					className='w-full rounded-md mb-2 p-2 outline-none'
 					value={form.username}
@@ -35,8 +35,10 @@ const Login = () => {
 						<img src={eyeLogo} alt='show-password' className='h-[30px]' />
 					</button>
 				</div>
-				<div className='w-full h-full flex justify-center items-start pt-4'>
-					<button className='bg-white p-4 rounded-md shadow-md w-full'>
+				<div className='w-full h-full flex justify-center items-start pt-7'>
+					<button
+						onClick={() => handleLogin(form.username, form.password)}
+						className='bg-white p-4 rounded-md shadow-md w-full'>
 						Войти
 					</button>
 				</div>

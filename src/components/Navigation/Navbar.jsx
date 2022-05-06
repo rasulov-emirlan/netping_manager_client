@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../App";
 
 const Navbar = () => {
+	const user = useContext(UserContext);
 	const navigate = useNavigate();
 	return (
 		<div className='w-full h-[50px] sticky top-0 bg-white shadow-md'>
@@ -11,14 +13,14 @@ const Navbar = () => {
 					className='text-2xl font-medium cursor-pointer'>
 					назад
 				</h3>
-				<a href='https://elcat.kg/' className='text-2xl cursor-pointer'>
-					ЭлКат
-				</a>
-				<button
+				<h1 className=''>{user.username}</h1>
+				{user.isAdmin ? (
+					<button
 					onClick={() => navigate("/admin")}
 					className='text-2xl h-full p-2'>
 					Настройки
-				</button>
+					</button>
+				) : <></>}
 			</div>
 		</div>
 	);
