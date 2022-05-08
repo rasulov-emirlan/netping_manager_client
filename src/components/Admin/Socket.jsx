@@ -1,14 +1,10 @@
 import React from "react";
 
-const types = ["","неизвестно", "охлаждение", "обогрев", "генератор"];
+const types = ["", "неизвестно", "охлаждение", "обогрев", "генератор"];
 
 const Socket = ({
-	locationID,
 	socket,
 	isEditing,
-	handleChangeBtn,
-	editingSocket,
-	setEditingSocket,
 	handleDeleteBtn,
 }) => {
 	return (

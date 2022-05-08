@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
 	addSocket,
 	deleteSocket,
@@ -8,14 +9,9 @@ import {
 import Socket from "./Socket";
 
 const SocketControl = () => {
+	const navigate = useNavigate();
 	const [locations, setLocations] = useState([]);
 	const [newSocket, setNewSocket] = useState({
-		locationID: null,
-		name: "",
-		mib: "",
-		type: 1,
-	});
-	const [editingSocket, setEditingSocket] = useState({
 		locationID: null,
 		name: "",
 		mib: "",
@@ -32,7 +28,6 @@ const SocketControl = () => {
 
 	const handleDeleteBtn = async (id) => {
 		const result = await deleteSocket(id);
-		console.log(result);
 		loadLocations();
 	};
 
@@ -49,7 +44,6 @@ const SocketControl = () => {
 			Number(newSocket.locationID),
 			Number(newSocket.type)
 		);
-		console.log(result);
 		setIsNewSocket(0);
 		setNewSocket({ locationID: null, name: "", type: 1, mib: "" });
 		loadLocations();
@@ -57,7 +51,6 @@ const SocketControl = () => {
 
 	// This function starts the changing process of a socket
 	const handleChangeBtn = (socket, locationID) => {
-		console.log(socket.id);
 		setIsEditingSocket(socket.id);
 		setEditingSocket({
 			locationID: locationID,
@@ -67,18 +60,15 @@ const SocketControl = () => {
 		});
 	};
 
-	// This function saves all the changes that were made after
-	// call of 'handleChangeBtn()'
-	const handleSaveChangesBtn = async () => {
-		const result = await updateSocket(
-			isEditingSocket.id,
-			editingSocket.name,
-			editingSocket.type,
-			editingSocket.mib
-		);
-		console.log(result);
-		setIsEditingSocket(null);
-	};
+	const handleCancelNewSocket = () => {
+		setIsNewSocket(null);
+		setEditingSocket({
+			locationID: 0,
+			name: "",
+			mib: "",
+			type: 1,
+		})
+	}
 
 	useEffect(() => {
 		loadLocations();
@@ -90,9 +80,8 @@ const SocketControl = () => {
 				<div
 					key={ii}
 					className='w-full my-6 pb-1 p-4 border border-gray-200 shadow-sm rounded-md'>
-					ID:<h2 className='px-4 font-medium'>{vv.id}</h2>
-					Станция:<h2 className='px-4 font-medium'>{vv.name}</h2>
-					Домен: <h2 className='px-4 font-medium'>{vv.snmpAddress}</h2>
+					<h2 onClick={() => navigate(`/socket/${vv.id}`)} className='px-4 text-xl font-medium hover:text-blue-500 cursor-pointer'>{vv.name}</h2>
+					<h2 className='px-4 font-medium'>{vv.snmpAddress}</h2>
 					{vv.sockets !== null ? (
 						<>
 							{vv.sockets.map((v, i) => (
@@ -102,14 +91,13 @@ const SocketControl = () => {
 									handleDeleteBtn={handleDeleteBtn}
 									handleChangeBtn={handleChangeBtn}
 									editingSocket={isEditingSocket}
-									setEditingSocket={setEditingSocket}
 								/>
 							))}
 						</>
 					) : (
 						<></>
 					)}
-					{isNewSocket == vv.id ? (
+					{isNewSocket === vv.id ? (
 						<div className='w-full grid border border-gray-400 rounded-md mb-4'>
 							<div className='m-2 text-xl'>
 								Название:{" "}
@@ -153,11 +141,16 @@ const SocketControl = () => {
 								</select>
 							</div>
 
-							<div className='w-full flex justify-center'>
+							<div className='w-full flex justify-center gap-2'>
 								<button
 									onClick={() => handleSendNewSocketBtn()}
 									className='w-[100px] rounded-xl p-2 mb-4 border border-1 border-gray-400'>
 									создать
+								</button>
+								<button
+									onClick={() => handleCancelNewSocket()}
+									className='w-[100px] rounded-xl p-2 mb-4 border border-1 border-gray-400'>
+									отмена
 								</button>
 							</div>
 						</div>
