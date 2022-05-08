@@ -16,9 +16,9 @@ const Navbar = () => {
 				<h1 className=''>{user.username}</h1>
 				{user.isAdmin ? (
 					<button
-					onClick={() => navigate("/admin")}
-					className='text-2xl h-full p-2'>
-					Настройки
+						onClick={() => navigate("/admin")}
+						className='text-2xl h-full p-2'>
+						админка
 					</button>
 				) : <></>}
 			</div>

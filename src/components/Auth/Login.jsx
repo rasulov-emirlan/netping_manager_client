@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import eyeLogo from "../../assets/eye.png";
 
 const Login = ({ handleLogin }) => {
 	const [form, setForm] = useState({
@@ -32,7 +31,7 @@ const Login = ({ handleLogin }) => {
 					<button
 						onClick={() => setIsVisiblePswd(!isVisiblePswd)}
 						className='w-[15%] h-full flex justify-center items-center'>
-						<img src={eyeLogo} alt='show-password' className='h-[30px]' />
+						<img src="/website/eye.png" alt='show-password' className='h-[30px]' />
 					</button>
 				</div>
 				<div className='w-full h-full flex justify-center items-start pt-7'>
