@@ -67,20 +67,24 @@ const SocketControl = () => {
 			name: "",
 			mib: "",
 			type: 1,
-		})
-	}
+		});
+	};
 
 	useEffect(() => {
 		loadLocations();
 	}, []);
 
 	return (
-		<div className='w-full lg:w-[1200px] mx-auto h-full'>
+		<div className='w-full lg:w-[1200px] mx-auto min-h-screen'>
 			{locations.map((vv, ii) => (
 				<div
 					key={ii}
 					className='w-full my-6 pb-1 p-4 border border-gray-200 shadow-sm rounded-md'>
-					<h2 onClick={() => navigate(`/socket/${vv.id}`)} className='px-4 text-xl font-medium hover:text-blue-500 cursor-pointer'>{vv.name}</h2>
+					<h2
+						onClick={() => navigate(`/socket/${vv.id}`)}
+						className='px-4 text-xl font-medium hover:text-blue-500 cursor-pointer'>
+						{vv.name}
+					</h2>
 					<h2 className='px-4 font-medium'>{vv.snmpAddress}</h2>
 					{vv.sockets !== null ? (
 						<>

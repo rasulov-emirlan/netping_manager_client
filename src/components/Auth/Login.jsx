@@ -5,7 +5,12 @@ const Login = ({ handleLogin }) => {
 		username: "",
 		password: "",
 	});
+	const [isInCorrect, setIsInCorrect] = useState(false);
 	const [isVisiblePswd, setIsVisiblePswd] = useState(false);
+
+	const handleLoginBtn = (username, password) => {
+		setIsInCorrect(handleLogin(username, password));
+	};
 	return (
 		<div className='w-screen h-screen flex justify-center items-center'>
 			<div className='w-[400px] h-[200px] bg-blue-100 rounded-md p-2 pb-0 shadow-xl'>
@@ -31,12 +36,17 @@ const Login = ({ handleLogin }) => {
 					<button
 						onClick={() => setIsVisiblePswd(!isVisiblePswd)}
 						className='w-[15%] h-full flex justify-center items-center'>
-						<img src="/website/eye.png" alt='show-password' className='h-[30px]' />
+						<img
+							src='/src/assets/eye.png'
+							alt='show-password'
+							className='h-[30px]'
+						/>
 					</button>
 				</div>
+				{isInCorrect && <h1 className='text-red-500'>неправильный пароль</h1>}
 				<div className='w-full h-full flex justify-center items-start pt-7'>
 					<button
-						onClick={() => handleLogin(form.username, form.password)}
+						onClick={() => handleLoginBtn(form.username, form.password)}
 						className='bg-white p-4 rounded-md shadow-md w-full'>
 						Войти
 					</button>

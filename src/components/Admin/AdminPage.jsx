@@ -25,7 +25,8 @@ const AdminPage = () => {
 				</button>
 			</div>
 
-			{currentMode === 1 ? <Users /> : <SocketControl />}
+			{currentMode === 1 && <Users />}
+			{currentMode === 2 && <SocketControl />}
 		</div>
 	);
 };

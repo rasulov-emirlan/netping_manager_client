@@ -5,7 +5,7 @@ import App from "./App";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-	<BrowserRouter basename="/website">
+	<BrowserRouter basename='/website'>
 		<React.StrictMode>
 			<App />
 		</React.StrictMode>

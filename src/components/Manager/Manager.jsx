@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { listSockets, listSocketsByLocation, toggleSocket } from "../../api/sockets";
+import {
+	listSockets,
+	listSocketsByLocation,
+	toggleSocket,
+} from "../../api/sockets";
 import Loader from "../Loager/Loader";
 import Warning from "../Modals/Warning";
 
 const Manager = () => {
 	const { id } = useParams();
 	const [station, setStation] = useState({
-		name:"",
+		name: "",
 	});
 	const [warning, setWarning] = useState({
 		check: false,
@@ -46,7 +50,7 @@ const Manager = () => {
 		if (data.length > 0) {
 			for (let i = 0; i < list.length; i++) {
 				if (list[i].snmpAddress == data[0].snmpAddress) {
-					setStation({name: list[i].name})
+					setStation({ name: list[i].name });
 				}
 			}
 		}
@@ -59,22 +63,23 @@ const Manager = () => {
 	}, []);
 
 	return (
-		<div className='w-full min-h-full bg-white'>
+		<div className='w-full min-h-screen bg-white'>
 			<div className='w-full sm:-[600px] md:-[800px] lg:w-[1200px] mx-0 md:mx-auto overflow-hidden'>
 				<div className=' bg-red-500 m-4 py-12 rounded-xl text-yellow-200 font-medium'>
-					<h1 className="text-white text-center text-2xl">{station.name}</h1>
+					<h1 className='text-white text-center text-2xl'>{station.name}</h1>
 					<h2 className='w-full flex justify-center text-xl text-center'>
 						Кнопки снизу отвечают за управление оборудованием в этой станции{" "}
 						<br />
 						Будьте осторожны
 					</h2>
+					``
 				</div>
 				{loading ? (
 					<Loader />
 				) : (
 					<div className='grid md:flex md:flex-wrap text-white text-xl justify-center py-12 w-full'>
-						{typeof sockets === 'object' && sockets === null ? (
-							<div className="text-black">У этой станции нету машин</div>
+						{typeof sockets === "object" && sockets === null ? (
+							<div className='text-black'>У этой станции нету машин</div>
 						) : (
 							<>
 								{" "}
