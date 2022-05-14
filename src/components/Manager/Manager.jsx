@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
 	listSockets,
 	listSocketsByLocation,
@@ -59,7 +59,6 @@ const Manager = () => {
 
 	useEffect(() => {
 		loadSockets();
-		// setStation({ domain: domain, community: community, port: port });
 	}, []);
 
 	return (

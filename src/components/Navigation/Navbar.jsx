@@ -7,7 +7,7 @@ const Navbar = ({ handleLogout }) => {
 	const navigate = useNavigate();
 	return (
 		<div className='w-full h-[50px] sticky top-0 bg-white shadow-md'>
-			<div className='w-full lg:w-[1200px] m-0 md:mx-auto h-full flex items-center justify-between px-4'>
+			<div className='w-full m-0 md:mx-auto h-full flex items-center justify-between p-1 md:px-4'>
 				<h3
 					onClick={() => navigate(-1)}
 					className='text-2xl font-medium cursor-pointer w-full'>
@@ -23,7 +23,7 @@ const Navbar = ({ handleLogout }) => {
 				{user.isAdmin && (
 					<button
 						onClick={() => navigate("/admin")}
-						className='text-2xl h-full p-2 w-full text-right'>
+						className='text-2xl h-full w-full text-right'>
 						админка
 					</button>
 				)}

@@ -96,7 +96,7 @@ const Users = () => {
 								setEditingUser((prev) => (prev === 0 ? v.id : 0));
 								setEditingUserData({
 									username: v.name,
-									password: v.password,
+									password: "",
 									isAdmin: v.isAdmin,
 								});
 							}}

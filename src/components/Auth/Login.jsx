@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import eyeImg from "/src/assets/eye.png";
 const Login = ({ handleLogin }) => {
 	const [form, setForm] = useState({
 		username: "",
@@ -36,11 +36,7 @@ const Login = ({ handleLogin }) => {
 					<button
 						onClick={() => setIsVisiblePswd(!isVisiblePswd)}
 						className='w-[15%] h-full flex justify-center items-center'>
-						<img
-							src='/src/assets/eye.png'
-							alt='show-password'
-							className='h-[30px]'
-						/>
+						<img src={eyeImg} alt='show-password' className='h-[30px]' />
 					</button>
 				</div>
 				{isInCorrect && <h1 className='text-red-500'>неправильный пароль</h1>}

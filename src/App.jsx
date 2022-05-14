@@ -8,6 +8,7 @@ import Navbar from "./components/Navigation/Navbar";
 import { setInterceptors } from "./api";
 import AdminPage from "./components/Admin/AdminPage";
 import Footer from "./components/Footer/Footer";
+import NotFound from "./components/NotFound/NotFound";
 
 export const UserContext = createContext({});
 
@@ -104,6 +105,7 @@ function App() {
 						) : (
 							<></>
 						)}
+						<Route path='*' element={<NotFound />} />
 					</Routes>
 					<Footer />
 				</>

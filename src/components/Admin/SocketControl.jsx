@@ -49,27 +49,6 @@ const SocketControl = () => {
 		loadLocations();
 	};
 
-	// This function starts the changing process of a socket
-	const handleChangeBtn = (socket, locationID) => {
-		setIsEditingSocket(socket.id);
-		setEditingSocket({
-			locationID: locationID,
-			name: socket.name,
-			mib: socket.snmpMib,
-			type: socket.type,
-		});
-	};
-
-	const handleCancelNewSocket = () => {
-		setIsNewSocket(null);
-		setEditingSocket({
-			locationID: 0,
-			name: "",
-			mib: "",
-			type: 1,
-		});
-	};
-
 	useEffect(() => {
 		loadLocations();
 	}, []);
@@ -93,7 +72,6 @@ const SocketControl = () => {
 									key={i}
 									socket={v}
 									handleDeleteBtn={handleDeleteBtn}
-									handleChangeBtn={handleChangeBtn}
 									editingSocket={isEditingSocket}
 								/>
 							))}
