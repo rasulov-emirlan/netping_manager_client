@@ -10,7 +10,7 @@ const Footer = () => {
 	return (
 		<div className='w-full min-h-[400px] bg-black text-white pb-12'>
 			<div className='w-full xl:w-[1200px] lg:mx-auto'>
-				<h1 className='text-lg md:text-2xl my-6 text-center w-full'>
+				<h1 className='text-lg md:text-2xl py-20 text-center w-full'>
 					Этот сайт был построен с использованием этих технологий
 				</h1>
 				<div className='w-full flex justify-center border rounded-md p-4 py-12'>

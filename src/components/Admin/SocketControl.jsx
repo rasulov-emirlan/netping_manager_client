@@ -37,7 +37,9 @@ const SocketControl = () => {
 	};
 
 	const handleSendNewSocketBtn = async () => {
-		console.log(newSocket);
+		if (newSocket.mib === "" || newSocket.name === "") {
+			return;
+		}
 		const result = await addSocket(
 			newSocket.mib,
 			newSocket.name,
@@ -47,6 +49,16 @@ const SocketControl = () => {
 		setIsNewSocket(0);
 		setNewSocket({ locationID: null, name: "", type: 1, mib: "" });
 		loadLocations();
+	};
+
+	const handleCancelNewSocket = () => {
+		setIsNewSocket(0);
+		setNewSocket({
+			locationID: null,
+			name: "",
+			mib: "",
+			type: 1,
+		});
 	};
 
 	useEffect(() => {
@@ -81,30 +93,38 @@ const SocketControl = () => {
 					)}
 					{isNewSocket === vv.id ? (
 						<div className='w-full grid border border-gray-400 rounded-md mb-4'>
-							<div className='m-2 text-xl'>
-								Название:{" "}
+							<div className='m-2 text-xl flex'>
+								<label className='w-[10%]' htmlFor='title'>
+									Название:{" "}
+								</label>
 								<input
+									id='title'
 									onChange={(e) =>
 										setNewSocket((prev) => ({ ...prev, name: e.target.value }))
 									}
 									placeholder='введите название этой машины'
 									type='text'
-									className='w-[60%]'
+									className='w-[90%] outline-none border p-1 rounded-md'
 								/>
 							</div>
-							<div className='m-2 text-xl'>
-								MIB:{" "}
+							<div className='m-2 text-xl flex'>
+								<label className='w-[10%]' htmlFor='mib'>
+									MIB:{" "}
+								</label>
 								<input
+									id='mib'
 									onChange={(e) =>
 										setNewSocket((prev) => ({ ...prev, mib: e.target.value }))
 									}
 									placeholder='введите snmp mib этой машины'
 									type='text'
-									className='w-[60%]'
+									className='w-[90%] outline-none border p-1 rounded-md'
 								/>
 							</div>
 							<div className='flex flex-wrap items-center m-2'>
-								Тип машины:
+								<label className='w-[10%] text-lg' htmlFor='objectType'>
+									Тип машины:{" "}
+								</label>
 								<select
 									placeholder='тип машины'
 									onChange={(e) =>
@@ -115,7 +135,7 @@ const SocketControl = () => {
 									}
 									name='objectType'
 									id='objectType'
-									className='border border-1 p-2 rounded-md m-2'>
+									className='border p-2 rounded-md'>
 									<option value={1}>незивестно</option>
 									<option value={2}>кондиционер</option>
 									<option value={3}>обогрев</option>

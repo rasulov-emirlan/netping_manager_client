@@ -7,8 +7,8 @@ const AdminPage = () => {
 	// and mode 2 is for locations
 	const [currentMode, setCurrentMode] = useState(1);
 	return (
-		<div className='w-full lg:w-[1200px] mx-auto h-full'>
-			<div className='w-full flex my-4 rounded-md overflow-hidden justify-between bg-gray-400 text-gray-300 text-xl'>
+		<div className='w-full xl:w-[1200px] mx-auto h-full'>
+			<div className='w-full flex my-4 lg:rounded-md overflow-hidden justify-between bg-gray-400 text-gray-300 text-xl'>
 				<button
 					onClick={() => setCurrentMode(1)}
 					className={`w-1/2 p-2 ${

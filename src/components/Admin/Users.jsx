@@ -24,6 +24,9 @@ const Users = () => {
 	};
 
 	const handleUserUpdate = async () => {
+		if (editingUserData.username === "" || editingUserData.password === "") {
+			return;
+		}
 		const result = await updateUser(
 			editingUser,
 			editingUserData.username,
@@ -108,9 +111,13 @@ const Users = () => {
 
 					{editingUser === v.id && (
 						<div className=''>
+							<label className='text-gray-400' htmlFor='username'>
+								новое имя
+							</label>
 							<input
+								id='username'
 								placeholder='имя'
-								className='border border-1 rounded-md w-full outline-none p-2 my-2'
+								className='border border-blue-500 rounded-md w-full outline-none p-2 mb-2'
 								value={editingUserData.username}
 								onChange={(e) =>
 									setEditingUserData((prev) => ({
@@ -120,9 +127,13 @@ const Users = () => {
 								}
 								type='text'
 							/>
+							<label className='text-gray-400' htmlFor='password'>
+								новой пароль
+							</label>
 							<input
+								id='password'
 								placeholder='пароль'
-								className='border border-1 rounded-md w-full outline-none p-2 my-2'
+								className='border border-blue-500 rounded-md w-full outline-none p-2 mb-2'
 								value={editingUserData.password}
 								onChange={(e) =>
 									setEditingUserData((prev) => ({
@@ -130,28 +141,32 @@ const Users = () => {
 										password: e.target.value,
 									}))
 								}
-								type='text'
+								type='password'
 							/>
+							<label className='text-gray-400' htmlFor='role'>
+								новая роль
+							</label>
 							<button
+								id='role'
 								onClick={() =>
 									setEditingUserData((prev) => ({
 										...prev,
 										isAdmin: !prev.isAdmin,
 									}))
 								}
-								className='text-blue-500'>
-								{editingUserData.isAdmin ? "админ" : "юзер"}
+								className='bg-blue-500 text-white rounded-md p-2 w-full'>
+								{editingUserData.isAdmin ? "😎 админ" : "😢 простолюдин"}
 							</button>
 
 							<div className='w-full flex justify-between'>
 								<button
 									onClick={() => handleUserDeletion(v.id)}
-									className='text-red-500'>
-									забанить
+									className='bg-red-500 w-[80px] rounded-md text-white p-2 mt-4'>
+									удалить
 								</button>
 								<button
 									onClick={() => handleUserUpdate()}
-									className='text-blue-500'>
+									className='bg-blue-500 p-2 rounded-md text-white mt-4'>
 									сохранить
 								</button>
 							</div>
